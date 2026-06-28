@@ -1,61 +1,27 @@
-const { Before, After, BeforeAll, AfterAll, AfterStep, setDefaultTimeout } = require('@cucumber/cucumber');
-const { chromium } = require('playwright');
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
+import { createBdd } from 'playwright-bdd';
+import { test } from '../fixtures/fixtures.js';
 
-setDefaultTimeout(180 * 1000); // 180 seconds
+const { AfterStep } = createBdd(test);
 
-let browser;
+AfterStep(async ({ page, $step, $testInfo }) => {
+  const screenshotsDir = path.join(process.cwd(), 'reports', 'screenshots', 'steps');
+  fs.mkdirSync(screenshotsDir, { recursive: true });
 
-BeforeAll(async function () {
-  fs.mkdirSync(path.join(process.cwd(), 'reports', 'videos'), { recursive: true });
-  fs.mkdirSync(path.join(process.cwd(), 'reports', 'history'), { recursive: true });
-  browser = await chromium.launch({ headless: false, args: ['--start-maximized'] });
-});
+  const stepName = String($step?.title || 'step')
+    .replace(/[^a-zA-Z0-9-_ ]/g, '')
+    .trim()
+    .replace(/\s+/g, '_')
+    .slice(0, 80);
 
-Before(async function () {
-  this.context = await browser.newContext({
-    viewport: null,
-    recordVideo: {
-      dir: path.join(process.cwd(), 'reports', 'videos'),
-      size: { width: 1280, height: 720 }
-    }
+  const fileName = `${Date.now()}_step_${$step?.index ?? 'x'}_${stepName}.png`;
+  const filePath = path.join(screenshotsDir, fileName);
+
+  await page.screenshot({ path: filePath, fullPage: true });
+
+  await $testInfo.attach(fileName, {
+    body: fs.readFileSync(filePath),
+    contentType: 'image/png',
   });
-  this.page = await this.context.newPage();
-  this.page.setDefaultTimeout(180000);
-  this.page.setDefaultNavigationTimeout(180000);
-});
-
-After(async function () {
-  // Capture video path before closing (recording is still active at this point)
-  const videoPath = this.page ? await this.page.video()?.path() : null;
-
-  if (this.context) {
-    await this.context.close(); // finalizes the video file
-  }
-
-  // Embed the completed video directly in the Cucumber HTML report
-  if (videoPath && fs.existsSync(videoPath)) {
-    const videoBuffer = fs.readFileSync(videoPath);
-    await this.attach(videoBuffer, 'video/webm');
-  }
-});
-
-AfterStep(async function ({ result }) {
-  if (!this.page) {
-    return;
-  }
-
-  const status = String(result?.status || '').toLowerCase();
-  if (status !== 'failed') {
-    return;
-  }
-
-  const screenshot = await this.page.screenshot({ fullPage: true });
-  // Embed screenshot directly in the Cucumber HTML report (no separate folder)
-  await this.attach(screenshot, 'image/png');
-});
-
-AfterAll(async function () {
-  // Don't close browser - keep it open for inspection
 });

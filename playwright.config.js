@@ -12,6 +12,7 @@ const testDir = defineBddConfig({
   features: 'features/**/*.feature',
   steps: [
     'src/steps/**/*.js',
+    'src/hooks/hooks.js',
     'src/fixtures/fixtures.js',
   ],
 });
