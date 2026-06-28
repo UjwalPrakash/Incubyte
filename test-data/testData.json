@@ -1,13 +1,9 @@
 {
   "firstName": "Ujwal",
-  "lastName": "Prakash",
   "address": "Chennai",
   "city": "Chennai",
-  "state": "Tamil Nadu",
-  "zipCode": "600001",
-  "phoneNumber": "9876543210",
-  "ssn": "123-45-6789",
-  "username": "ujwal_auto_12345",
+  "state": "Bihar",
+  "username": "test_auto",
   "password": "Test@123",
   "confirmPassword": "Test@123"
 }

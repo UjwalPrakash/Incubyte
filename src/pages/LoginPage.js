@@ -103,7 +103,7 @@ export class LoginPage {
 	}
 
 	async verifyAccountsOverviewPage() {
-		await expect(this.page.getByText(/Accounts Overview/i)).toBeVisible();
+		await expect(this.page.locator('h1:has-text(" Accounts Overview ")')).toBeVisible();
 	}
 
 	async captureAccountBalance() {
