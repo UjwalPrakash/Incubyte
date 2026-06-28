@@ -1,0 +1,36 @@
+{
+  // ─── Cucumber / Gherkin step gluing ───────────────────────────────────────
+  // Extension: Cucumber (Official)  →  cucumberopen.cucumber-official
+  //
+  // "features"  – glob(s) matching your .feature files
+  // "glue"      – glob(s) matching files that contain Given/When/Then steps
+  //               The extension scans these for step definitions and creates
+  //               Ctrl+Click / Go-to-Definition links from feature steps.
+  "cucumber.features": [
+    "features/**/*.feature"
+  ],
+  "cucumber.glue": [
+    "src/steps/**/*.js",
+    "src/hooks/hooks.js"
+  ],
+
+  // ─── File associations ────────────────────────────────────────────────────
+  "files.associations": {
+    "*.feature": "cucumber"
+  },
+
+  // ─── Editor helpers for .feature files ───────────────────────────────────
+  "[cucumber]": {
+    "editor.formatOnSave": true,
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  },
+
+  // ─── JavaScript IntelliSense (Go-to-Definition in .js files) ─────────────
+  "javascript.suggest.autoImports": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.preferences.importModuleSpecifier": "relative"
+}
