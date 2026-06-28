@@ -1,6 +1,5 @@
 import { test as base } from 'playwright-bdd';
 import { LoginPage } from '../pages/LoginPage.js';
-import { HomePage } from '../pages/HomePage.js';
 
 /**
  * Custom fixtures that extend playwright-bdd's base `test`.
@@ -18,11 +17,6 @@ export const test = base.extend({
   loginPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await use(loginPage);
-  },
-
-  homePage: async ({ page }, use) => {
-    const homePage = new HomePage(page);
-    await use(homePage);
   },
 });
 

@@ -15,8 +15,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@cucumber/cucumber": "^13.0.0",
     "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.2",
     "playwright-bdd": "^9.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
   }
 }

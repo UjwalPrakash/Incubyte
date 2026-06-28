@@ -1,5 +1,6 @@
 Feature: ParaBank User Registration and Login
 
+  @Login
   Scenario: Register new user, login, and verify account balance
     Given User launches the ParaBank application
     When User clicks on Register link
